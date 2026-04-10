@@ -26,7 +26,7 @@ export class AuthService {
     const exists = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (exists) throw new ConflictException('Email already registered')
+    if (exists) throw new ConflictException('Email already registered');
 
     const passwordHash = await bcryptTyped.hash(dto.password, 10);
 
@@ -39,7 +39,7 @@ export class AuthService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         role: (dto.role as any) ?? 'RECEPTIONIST',
       },
-    })
+    });
 
     const token = this.signToken(user.id, user.email, user.role);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
