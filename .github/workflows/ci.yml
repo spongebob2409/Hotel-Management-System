@@ -23,6 +23,10 @@ jobs:
         working-directory: frontend
         run: npm install   #changed
 
+      - name: Run lint
+        working-directory: frontend
+        run: npm run lint        
+
       - name: Run build
         working-directory: frontend
         run: npm run build
