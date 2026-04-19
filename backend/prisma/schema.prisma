@@ -1,10 +1,11 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      ="postgresql://hotel_user:hotel_pass@localhost:5432/hotel_db"
+ 
 }
 
 // ─── Users & Auth ────────────────────────────────────────────
