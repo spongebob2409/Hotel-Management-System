@@ -8,10 +8,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IoTModule = void 0;
 const common_1 = require("@nestjs/common");
+const iot_service_1 = require("./iot.service");
+const iot_controller_1 = require("./iot.controller");
 let IoTModule = class IoTModule {
 };
 exports.IoTModule = IoTModule;
 exports.IoTModule = IoTModule = __decorate([
-    (0, common_1.Module)({})
+    (0, common_1.Module)({
+        controllers: [iot_controller_1.IoTController],
+        providers: [iot_service_1.IoTService],
+        exports: [iot_service_1.IoTService],
+    })
 ], IoTModule);
 //# sourceMappingURL=iot.module.js.map
