@@ -1,11 +1,11 @@
 export declare class LoginDto {
-    email: string;
-    password: string;
+    email: string | undefined;
+    password: string | undefined;
 }
 export declare class RegisterDto {
-    name: string;
-    email: string;
+    name: string | undefined;
+    email: string | undefined;
     phone?: string;
-    password: string;
+    password: string | undefined;
     role?: string;
 }

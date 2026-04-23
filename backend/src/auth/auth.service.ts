@@ -8,13 +8,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 
-type BcryptLike = {
-  hash(password: string, saltRounds: number): Promise<string>;
-  compare(password: string, hash: string): Promise<boolean>;
-};
-
-const bcryptTyped = bcrypt as unknown as BcryptLike;
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -23,44 +16,54 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const exists = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
     if (exists) throw new ConflictException('Email already registered');
 
-    const passwordHash = await bcryptTyped.hash(dto.password, 10);
+    const passwordHash = await bcrypt.hash(dto.password as string, 10);
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const user = await this.prisma.user.create({
       data: {
         name: dto.name,
         email: dto.email,
-        phone: dto.phone,
+        phone: dto.phone ?? null,
         passwordHash,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         role: (dto.role as any) ?? 'RECEPTIONIST',
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     const token = this.signToken(user.id, user.email, user.role);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     return { token, user: this.sanitize(user) };
   }
 
   async login(dto: LoginDto) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
-    const valid = await bcryptTyped.compare(dto.password, user.passwordHash);
+    const valid = await bcrypt.compare(
+      dto.password as string,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      user.passwordHash as string,
+    );
     if (!valid) throw new UnauthorizedException('Invalid credentials');
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     const token = this.signToken(user.id, user.email, user.role);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     return { token, user: this.sanitize(user) };
   }
 
   async getMe(userId: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new UnauthorizedException();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

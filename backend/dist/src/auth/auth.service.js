@@ -47,7 +47,6 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const prisma_service_1 = require("../prisma/prisma.service");
 const bcrypt = __importStar(require("bcrypt"));
-const bcryptTyped = bcrypt;
 let AuthService = class AuthService {
     prisma;
     jwt;
@@ -61,12 +60,12 @@ let AuthService = class AuthService {
         });
         if (exists)
             throw new common_1.ConflictException('Email already registered');
-        const passwordHash = await bcryptTyped.hash(dto.password, 10);
+        const passwordHash = await bcrypt.hash(dto.password, 10);
         const user = await this.prisma.user.create({
             data: {
                 name: dto.name,
                 email: dto.email,
-                phone: dto.phone,
+                phone: dto.phone ?? null,
                 passwordHash,
                 role: dto.role ?? 'RECEPTIONIST',
             },
@@ -80,7 +79,7 @@ let AuthService = class AuthService {
         });
         if (!user)
             throw new common_1.UnauthorizedException('Invalid credentials');
-        const valid = await bcryptTyped.compare(dto.password, user.passwordHash);
+        const valid = await bcrypt.compare(dto.password, user.passwordHash);
         if (!valid)
             throw new common_1.UnauthorizedException('Invalid credentials');
         const token = this.signToken(user.id, user.email, user.role);
