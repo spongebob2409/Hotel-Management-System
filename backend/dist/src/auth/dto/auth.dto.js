@@ -18,12 +18,12 @@ class LoginDto {
 exports.LoginDto = LoginDto;
 __decorate([
     (0, class_validator_1.IsEmail)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], LoginDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], LoginDto.prototype, "password", void 0);
 class RegisterDto {
     name;
@@ -36,13 +36,14 @@ exports.RegisterDto = RegisterDto;
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], RegisterDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsEmail)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], RegisterDto.prototype, "email", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "phone", void 0);
@@ -50,9 +51,10 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(6),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], RegisterDto.prototype, "password", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "role", void 0);
